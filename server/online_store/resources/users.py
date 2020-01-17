@@ -1,6 +1,8 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import create_access_token, create_refresh_token
 
+from sqlalchemy.exc import IntegrityError
+
 from online_store.models.user import UserModel
 
 
@@ -45,6 +47,13 @@ class UsersResource(Resource):
             password_hash=UserModel.hash_password(request.get("password"))
         )
 
-        user.save()
+        try:
+            user.save()
+        except IntegrityError:
+            return {
+                "error": {
+                    "message": "Username or email already in use!"
+                }
+            }, 400
 
         return None, 200
