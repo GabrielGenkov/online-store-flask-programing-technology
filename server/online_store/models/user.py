@@ -12,14 +12,14 @@ class UserModel(db.Model):
 
     offers = db.relationship(
         "OfferModel",
-        foreign_keys="offer.author_id",
+        foreign_keys="OfferModel.author_id",
         backref="author",
         lazy=True
     )
 
     items_bought = db.relationship(
         "OfferModel",
-        foreign_keys="offer.buyer_id",
+        foreign_keys="OfferModel.buyer_id",
         backref="buyer",
         lazy=True
     )
