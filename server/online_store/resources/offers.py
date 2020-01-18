@@ -5,17 +5,20 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 
 
 class OffersResource(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument("title")
-    parser.add_argument("description")
-    parser.add_argument("price", type=float)
-    parser.add_argument("count", location="args", default=0, type=int)
-    parser.add_argument("page", location="args", default=0, type=int)
+    offer_parser = reqparse.RequestParser()
+    offer_parser.add_argument("id", type=int)
+    offer_parser.add_argument("title")
+    offer_parser.add_argument("description")
+    offer_parser.add_argument("price", type=float)
+
+    options_parser = reqparse.RequestParser()
+    options_parser.add_argument("count", location="args", default=0, type=int)
+    options_parser.add_argument("page", location="args", default=0, type=int)
 
     @jwt_required
     def get(self):
-        count = self.parser.parse_args()["count"]
-        page = self.parser.parse_args()["page"]
+        count = self.options_parser.parse_args()["count"]
+        page = self.options_parser.parse_args()["page"]
 
         if count == 0:
             offers = OfferModel.query.all()
@@ -26,7 +29,7 @@ class OffersResource(Resource):
 
     @jwt_required
     def post(self):
-        args = self.parser.parse_args()
+        args = self.offer_parser.parse_args()
         title = args["title"]
         description = args["description"]
         price = args["price"]
@@ -38,5 +41,33 @@ class OffersResource(Resource):
             price=price,
             author=UserModel.query.get(author_id)
         ).save()
+
+        return None, 200
+
+    @jwt_required
+    def put(self):
+        args = self.offer_parser.parse_args()
+        offer = OfferModel.query.get(args["id"])
+
+        if not offer:
+            return {
+                "error": {
+                    "message": "Offer not found"
+                }
+            }, 404
+
+        user = UserModel.query.get(get_jwt_identity())
+        if offer.author != user:
+            return {
+                "error": {
+                    "message": "Not authorized to edit this offer"
+                }
+            }, 401
+
+        offer.title = args["title"]
+        offer.description = args["description"]
+        offer.price = args["price"]
+
+        offer.save()
 
         return None, 200
