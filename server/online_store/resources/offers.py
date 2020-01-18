@@ -15,6 +15,9 @@ class OffersResource(Resource):
     options_parser.add_argument("count", location="args", default=0, type=int)
     options_parser.add_argument("page", location="args", default=0, type=int)
 
+    delete_parser = reqparse.RequestParser()
+    delete_parser.add_argument("id", type=int)
+
     @jwt_required
     def get(self):
         count = self.options_parser.parse_args()["count"]
@@ -69,5 +72,23 @@ class OffersResource(Resource):
         offer.price = args["price"]
 
         offer.save()
+
+        return None, 200
+
+    @jwt_required
+    def delete(self):
+        offer_id = self.delete_parser.parse_args()["id"]
+        offer = OfferModel.query.get(offer_id)
+
+        user = UserModel.query.get(get_jwt_identity())
+
+        if offer.author != user:
+            return {
+                "error": {
+                    "message": "Not authorized to edit this offer"
+                }
+            }, 401
+
+        offer.delete()
 
         return None, 200
