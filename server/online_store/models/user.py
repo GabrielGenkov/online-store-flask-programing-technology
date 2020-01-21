@@ -10,8 +10,22 @@ class UserModel(db.Model):
     email = db.Column(db.String(256), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
 
+    offers = db.relationship(
+        "OfferModel",
+        foreign_keys="OfferModel.author_id",
+        backref="author",
+        lazy=True
+    )
+
+    items_bought = db.relationship(
+        "OfferModel",
+        foreign_keys="OfferModel.buyer_id",
+        backref="buyer",
+        lazy=True
+    )
+
     def __repr__(self):
-        return '<User %r>' % self.username
+        return "<User {}>".format(self.username)
 
     def save(self):
         db.session.add(self)
