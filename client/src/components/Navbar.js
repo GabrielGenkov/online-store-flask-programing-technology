@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Menu } from 'semantic-ui-react';
+import { Menu, Dropdown } from 'semantic-ui-react';
 
 import { Link } from 'react-router-dom';
 
@@ -37,6 +37,19 @@ const Navbar = () => {
                         onClick={handleItemClick}
                     />
                 </Link>
+                <Dropdown item text='Profile'>
+                    <Dropdown.Menu>
+                        <Dropdown.Header>My profile</Dropdown.Header>
+                        <Link to="/profile/myoffers">
+                            <Dropdown.Item>
+                                My Offers
+                            </Dropdown.Item>
+                        </Link>
+                        <Dropdown.Item>Medium</Dropdown.Item>
+                        <Dropdown.Item>Large</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+                
             </Menu.Menu>
         </Menu>
     )

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Home.css'
 
-import{ Card, Icon } from 'semantic-ui-react';
+import{ Card } from 'semantic-ui-react';
 
 const Home = () => {
     let test = {
