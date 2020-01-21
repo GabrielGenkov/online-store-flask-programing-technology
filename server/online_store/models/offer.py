@@ -24,6 +24,12 @@ class OfferModel(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+    def buy(self, buyer):
+        self.active = False
+        self.buyer = buyer
+
+        self.save()
+
     def to_json(self):
         return {
             "id": self.id,

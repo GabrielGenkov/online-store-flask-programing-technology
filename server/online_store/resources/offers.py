@@ -146,3 +146,21 @@ class OfferResource(Resource):
             }, 401
 
         offer.delete()
+
+
+class BuyOfferResource(Resource):
+    @jwt_required
+    def post(self, id):
+        offer = OfferModel.query.get(id)
+        current_user = UserModel.query.get(get_jwt_identity())
+
+        if offer.author == current_user:
+            return {
+                "error": {
+                    "message": "Cannot buy your own product"
+                }
+            }, 400
+
+        offer.buy(current_user)
+
+        return None, 200
