@@ -92,3 +92,57 @@ class OffersResource(Resource):
         offer.delete()
 
         return None, 200
+
+
+class OfferResource(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument("title")
+    parser.add_argument("description")
+    parser.add_argument("price", type=float)
+
+    @jwt_required
+    def get(self, id):
+        return OfferModel.query.get(id).to_json()
+
+    @jwt_required
+    def put(self, id):
+        args = self.parser.parse_args()
+        offer = OfferModel.query.get(id)
+
+        if not offer:
+            return {
+                "error": {
+                    "message": "Offer not found"
+                }
+            }, 404
+
+        user = UserModel.query.get(get_jwt_identity())
+        if offer.author != user:
+            return {
+                "error": {
+                    "message": "Not authorized to edit this offer"
+                }
+            }, 401
+
+        offer.title = args["title"]
+        offer.description = args["description"]
+        offer.price = args["price"]
+
+        offer.save()
+
+        return None, 200
+
+    @jwt_required
+    def delete(self, id):
+        offer = OfferModel.query.get(id)
+
+        user = UserModel.query.get(get_jwt_identity())
+
+        if offer.author != user:
+            return {
+                "error": {
+                    "message": "Not authorized to edit this offer"
+                }
+            }, 401
+
+        offer.delete()
