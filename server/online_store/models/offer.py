@@ -12,7 +12,7 @@ class OfferModel(db.Model):
         db.DateTime,
         default=db.func.current_timestamp()
     )
-    active = db.Column(db.Boolean, default=False)
+    active = db.Column(db.Boolean, default=True)
     author_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     buyer_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
