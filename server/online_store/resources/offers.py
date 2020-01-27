@@ -27,7 +27,8 @@ class OffersResource(Resource):
         page = self.options_parser.parse_args()["page"]
         search = self.options_parser.parse_args()["search"]
 
-        offers = OfferModel.query.filter(OfferModel.title.contains(search))
+        offers = OfferModel.query.filter(OfferModel.title.contains(search)) \
+            .filter_by(active=True)
 
         if count == 0:
             offers = offers.all()

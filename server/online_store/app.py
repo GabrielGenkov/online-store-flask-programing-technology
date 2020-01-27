@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 
 from online_store.extensions import api, db, jwt
 from online_store.resources.users import (
@@ -24,6 +25,7 @@ def register_extensions(app):
     api.init_app(app)
     db.init_app(app)
     jwt.init_app(app)
+    CORS(app)
 
 
 def create_app():
