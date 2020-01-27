@@ -1,29 +1,27 @@
-import React from 'react'
-import { Card } from 'semantic-ui-react'
-import './PurchasedOffers.css'
+import React, { useEffect, useState } from 'react';
 
-const PurchasedOffers = () => {
-    let test = {
-        image: "https://picsum.photos/300/200",
-        header: "Purchased offer",
-        meta: "19.01.2020",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+import { PurchasableOffer } from '../../components/PurchasableOffer'
+import API from '../../api'
+
+const PurchasedOffer = () => {
+    const [offers, setOffers] = useState([]);
+
+    useEffect(() => {
+        fetchOffers()
+    }, [])
+
+    const fetchOffers = async () => {
+        const res = await API.get("bought_items")
+        setOffers(res.data)
     }
-    let cards = [1, 2, 3, 4, 5, 6, 7 , 8, 9, 10]
+    
     return(
         <div className="container">
-            {cards.map(i => 
-                <Card
-                    key={i}
-                    image={test.image}
-                    header={test.header}
-                    meta={test.meta}
-                    description={test.description}
-                    // extra={extra}
-                />
+            {offers.map(offer => 
+                <PurchasableOffer key={offer.id} refreshOffers={fetchOffers} offer={offer} disabled/>
             )}
         </div>
     )
 }
 
-export default PurchasedOffers;
+export default PurchasedOffer;

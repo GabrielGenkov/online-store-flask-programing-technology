@@ -22,7 +22,7 @@ class UsersResource(Resource):
     def post(self):
         request = self.parser.parse_args()
         user = UserModel.query.filter_by(email=request.get("email")).first()
-
+        print(request.get("email"))
         if not user:
             return {
                 "error": {

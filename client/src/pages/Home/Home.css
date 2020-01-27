@@ -8,3 +8,9 @@
 .container > .ui.card{
     margin: 10px;
 }
+
+.container > .ui.card .card-actions{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

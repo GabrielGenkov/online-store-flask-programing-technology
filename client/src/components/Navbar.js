@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
+import { Logout } from './Logout'
 import { Menu, Dropdown } from 'semantic-ui-react';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
 
-    const [activeItem, setActiveItem] = useState(window.location.pathname)
+    const [activeItem, setActiveItem] = useState("asdasd")
+    const location = useLocation()
     
-    let handleItemClick = (e, { to }) => {
-        setActiveItem(to)
-    }   
+    useEffect(() => {
+        setActiveItem(location.pathname)
+    }, [location])
 
     return(
         <Menu color="blue" size="large" pointing secondary>
@@ -20,41 +22,46 @@ const Navbar = () => {
                 to="/"
                 name='home'
                 active={activeItem === '/'}
-                onClick={handleItemClick}
             />
             <Menu.Menu position='right'>
-                <Menu.Item
-                    as={Link}
-                    to="/signin"
-                    name='sign in'
-                    active={activeItem === '/signin'}
-                    onClick={handleItemClick}
-                />
-                <Menu.Item
-                    as={Link}                    
-                    to="/signup"
-                    name='sign up'
-                    active={activeItem === '/signup'}
-                    onClick={handleItemClick}
-                />
-                <Dropdown item text='Profile'>
-                    <Dropdown.Menu>
-                        <Dropdown.Header>My profile</Dropdown.Header>
-                            <Dropdown.Item as={Link} to="/profile/myoffers" onClick={handleItemClick}>
-                                My Offers
-                            </Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/profile/purchasedoffers" onClick={handleItemClick}>
-                                Purchased Items
-                            </Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
-                <Menu.Item
-                    as={Link}
-                    to="/signin"
-                    name='log out'
-                    active={activeItem === '/signin'}
-                    onClick={handleItemClick}
-                />
+                {!sessionStorage.getItem("access_token") &&
+                    <>
+                        <Menu.Item
+                            as={Link}
+                            to="/signin"
+                            name='sign in'
+                            active={activeItem === '/signin'}
+                        />
+                        <Menu.Item
+                            as={Link}                    
+                            to="/signup"
+                            name='sign up'
+                            active={activeItem === '/signup'}
+                        />
+                    </>
+                }
+                {sessionStorage.getItem("access_token") &&
+                    <>
+                        <Menu.Item
+                            as={Link}                    
+                            to="/add_offer"
+                            name='add offer'
+                            active={activeItem === '/add_offer'}
+                        />
+                        <Dropdown item text='Profile'>
+                            <Dropdown.Menu>
+                                <Dropdown.Header>My profile</Dropdown.Header>
+                                    <Dropdown.Item as={Link} to="/profile/myoffers" >
+                                        My Offers
+                                    </Dropdown.Item>
+                                    <Dropdown.Item as={Link} to="/profile/purchasedoffers" >
+                                        Purchased Items
+                                    </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Logout />
+                    </>
+                }
             </Menu.Menu>
         </Menu>
     )
