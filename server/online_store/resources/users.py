@@ -1,9 +1,16 @@
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import (
+    create_access_token,
+    create_refresh_token,
+    jwt_required,
+    get_jwt_identity
+)
 
 from sqlalchemy.exc import IntegrityError
 
 from online_store.models.user import UserModel
+
+from online_store.models.offer import OfferModel
 
 
 class UsersResource(Resource):
@@ -57,3 +64,17 @@ class UsersResource(Resource):
             }, 400
 
         return None, 200
+
+
+class UserBoughtItemsResource(Resource):
+    @jwt_required
+    def get(self):
+        offers = OfferModel.query.filter_by(buyer_id=get_jwt_identity()).all()
+        return [offer.to_json() for offer in offers], 200
+
+
+class UserItemsResource(Resource):
+    @jwt_required
+    def get(self):
+        offers = OfferModel.query.filter_by(author_id=get_jwt_identity()).all()
+        return [offer.to_json() for offer in offers], 200
