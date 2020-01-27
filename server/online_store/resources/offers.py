@@ -14,19 +14,25 @@ class OffersResource(Resource):
     options_parser = reqparse.RequestParser()
     options_parser.add_argument("count", location="args", default=0, type=int)
     options_parser.add_argument("page", location="args", default=0, type=int)
+    options_parser.add_argument("search",
+                                location="args",
+                                default="",
+                                type=str)
 
     delete_parser = reqparse.RequestParser()
     delete_parser.add_argument("id", type=int)
 
-    @jwt_required
     def get(self):
         count = self.options_parser.parse_args()["count"]
         page = self.options_parser.parse_args()["page"]
+        search = self.options_parser.parse_args()["search"]
+
+        offers = OfferModel.query.filter(OfferModel.title.contains(search))
 
         if count == 0:
-            offers = OfferModel.query.all()
+            offers = offers.all()
         else:
-            offers = OfferModel.query.limit(count).offset(count * page).all()
+            offers = offers.limit(count).offset(count * page).all()
 
         return [offer.to_json() for offer in offers], 200
 
