@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(response => response, error => {
         return new Promise((resolve, reject) => reject(error));
     }
 
-    if (error.config.url === "/users/refresh") {
+    if (error.config.url === "users/refresh") {
         sessionStorage.clear();
         return new Promise((resolve, reject) => reject(error));
     }
