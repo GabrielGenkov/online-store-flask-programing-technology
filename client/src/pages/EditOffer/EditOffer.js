@@ -61,7 +61,7 @@ const EditOffer = () => {
                     label='Price'
                     type="number"
                     min="0"
-                    step="0.1"
+                    step="0.01"
                     placeholder='Price'
                     value={price}
                     onChange={e => setPrice(e.target.value)}
