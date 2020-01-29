@@ -3,6 +3,7 @@ from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
     jwt_required,
+    jwt_refresh_token_required,
     get_jwt_identity
 )
 
@@ -64,6 +65,14 @@ class UsersResource(Resource):
             }, 400
 
         return None, 200
+
+
+class UserRefreshTokenResource(Resource):
+    @jwt_refresh_token_required
+    def post(self):
+        return {
+            "access_token": create_access_token(identity=get_jwt_identity())
+        }
 
 
 class UserBoughtItemsResource(Resource):

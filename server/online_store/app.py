@@ -4,6 +4,7 @@ from flask_cors import CORS
 from online_store.extensions import api, db, jwt
 from online_store.resources.users import (
     UsersResource,
+    UserRefreshTokenResource,
     UserBoughtItemsResource,
     UserItemsResource
 )
@@ -16,6 +17,7 @@ from online_store.resources.offers import (
 
 def register_extensions(app):
     api.add_resource(UsersResource, "/users")
+    api.add_resource(UserRefreshTokenResource, "/users/refresh")
     api.add_resource(UserBoughtItemsResource, "/bought_items")
     api.add_resource(UserItemsResource, "/items")
     api.add_resource(OffersResource, "/offers")
