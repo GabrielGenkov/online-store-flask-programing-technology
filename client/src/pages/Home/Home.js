@@ -3,7 +3,6 @@ import './Home.css'
 
 import { PurchasableOffer } from '../../components/PurchasableOffer'
 import API from '../../api'
-import { debounce } from "../../utils";
 
 import { Icon, Pagination, Input, Search } from 'semantic-ui-react'
 
