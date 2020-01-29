@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./start_client.sh & ./start_server.sh && fg
+./start_client.sh & ./start_server.sh

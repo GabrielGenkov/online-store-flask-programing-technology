@@ -41,7 +41,7 @@ const Home = () => {
     }
     
     return(
-        <>
+        <div className="wrapper">
             <div className="container">
                 <Search
                     loading={isLoading}
@@ -54,6 +54,8 @@ const Home = () => {
                 {offers.map(offer => 
                     <PurchasableOffer key={offer.id} refreshOffers={fetchOffers} offer={offer}/>
                 )}
+            </div>
+            <div className="navigation">
                 <Pagination
                     ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
                     firstItem={{ content: <Icon name='angle double left' />, icon: true }}
@@ -66,7 +68,7 @@ const Home = () => {
                 />
                 <Input type="number" min={5} max={50} value={itemsPerPage} onChange={e => setItemsPerPage(e.target.value)}/>
             </div>
-        </>
+        </div>
     )
 }
 

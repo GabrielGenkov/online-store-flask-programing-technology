@@ -8,14 +8,21 @@ import { Link, useLocation } from 'react-router-dom';
 const Navbar = () => {
 
     const [activeItem, setActiveItem] = useState("asdasd")
+    const [media, setMedia] = useState(false)
     const location = useLocation()
     
     useEffect(() => {
         setActiveItem(location.pathname)
+        setMedia(window.matchMedia('(max-width: 485px)').matches)
+        window.matchMedia('(max-width: 485px)').addListener(refreshMedia)
     }, [location])
 
+    const refreshMedia = () => {
+        setMedia(window.matchMedia('(max-width: 485px)').matches)
+    }
+
     return(
-        <Menu color="blue" size="large" pointing secondary>
+        <Menu className="navbar" fluid vertical={media} color="blue" size="large" pointing secondary>
             <Menu.Item header>Online Store</Menu.Item>
             <Menu.Item
                 as={Link}
@@ -48,7 +55,7 @@ const Navbar = () => {
                             name='add offer'
                             active={activeItem === '/add_offer'}
                         />
-                        <Dropdown item text='Profile'>
+                        <Dropdown direction={media ? "left" : null} item text='Profile'>
                             <Dropdown.Menu>
                                 <Dropdown.Header>My profile</Dropdown.Header>
                                     <Dropdown.Item as={Link} to="/profile/myoffers" >

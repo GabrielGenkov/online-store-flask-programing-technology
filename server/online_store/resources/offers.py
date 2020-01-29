@@ -33,12 +33,12 @@ class OffersResource(Resource):
         all_offer_count = offers.count()
 
         if count == 0:
+            page_count = 1
             offers = offers.all()
         else:
+            page_count = (all_offer_count // count) + \
+                (1 if all_offer_count % count != 0 else 0)
             offers = offers.limit(count).offset(count * page).all()
-
-        page_count = (all_offer_count // count) + \
-            (1 if all_offer_count % count != 0 else 0)
 
         return {
             "page_count": page_count,
