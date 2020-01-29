@@ -72,7 +72,7 @@ class OffersResource(Resource):
                 "error": {
                     "message": "Not authorized to edit this offer"
                 }
-            }, 401
+            }, 403
 
         offer.title = args["title"]
         offer.description = args["description"]
@@ -94,7 +94,7 @@ class OffersResource(Resource):
                 "error": {
                     "message": "Not authorized to edit this offer"
                 }
-            }, 401
+            }, 403
 
         offer.delete()
 
@@ -129,7 +129,7 @@ class OfferResource(Resource):
                 "error": {
                     "message": "Not authorized to edit this offer"
                 }
-            }, 401
+            }, 403
 
         offer.title = args["title"]
         offer.description = args["description"]
@@ -150,7 +150,7 @@ class OfferResource(Resource):
                 "error": {
                     "message": "Not authorized to edit this offer"
                 }
-            }, 401
+            }, 403
 
         offer.delete()
 
