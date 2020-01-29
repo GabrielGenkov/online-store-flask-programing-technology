@@ -40,7 +40,7 @@ export const PurchasableOffer = ({offer, refreshOffers, disabled=false}) => {
                                 </Button.Content>
                             </Button>
                             <Label basic color="green" pointing='left'>
-                                ${offer.price}
+                                ${offer.price.toFixed(2)}
                             </Label>
                         </Button>
                         <span>
