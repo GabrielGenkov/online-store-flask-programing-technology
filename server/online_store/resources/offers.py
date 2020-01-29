@@ -24,18 +24,26 @@ class OffersResource(Resource):
 
     def get(self):
         count = self.options_parser.parse_args()["count"]
-        page = self.options_parser.parse_args()["page"]
+        page = self.options_parser.parse_args()["page"] - 1
         search = self.options_parser.parse_args()["search"]
 
         offers = OfferModel.query.filter(OfferModel.title.contains(search)) \
             .filter_by(active=True)
+
+        all_offer_count = offers.count()
 
         if count == 0:
             offers = offers.all()
         else:
             offers = offers.limit(count).offset(count * page).all()
 
-        return [offer.to_json() for offer in offers], 200
+        page_count = (all_offer_count // count) + \
+            (1 if all_offer_count % count != 0 else 0)
+
+        return {
+            "page_count": page_count,
+            "offers": [offer.to_json() for offer in offers]
+        }, 200
 
     @jwt_required
     def post(self):
